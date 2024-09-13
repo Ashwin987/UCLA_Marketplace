@@ -7,18 +7,18 @@ const EventTicketsScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Text style={styles.title}>Event Tickets</Text>
 
-            <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('BuyTickets')}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('BuyTicketsScreen')}>
                 <Icon name="ticket-outline" size={24} color="#1E90FF" />
                 <Text style={styles.buttonText}>Buy Tickets</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('SellTickets')}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('SellTicketsScreen')}>
                 <Icon name="swap-horizontal-outline" size={24} color="#1E90FF" />
                 <Text style={styles.buttonText}>Sell Tickets</Text>
             </TouchableOpacity>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

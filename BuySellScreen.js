@@ -7,18 +7,18 @@ const BuySellScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Text style={styles.title}>Buy/Sell</Text>
 
-            <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('BuyItems')}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('BuyScreen')}>
                 <Icon name="cart-outline" size={24} color="#1E90FF" />
                 <Text style={styles.buttonText}>Buy</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('SellItems')}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('SellScreen')}>
                 <Icon name="swap-horizontal-outline" size={24} color="#1E90FF" />
                 <Text style={styles.buttonText}>Sell</Text>
             </TouchableOpacity>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
