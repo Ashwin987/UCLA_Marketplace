@@ -1,12 +1,11 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { ListingsContext } from './ListingsContext';
+import axios from 'axios';
 
 const PostListingScreen = ({ navigation }) => {
     const [category, setCategory] = useState('Tutoring');
     const [details, setDetails] = useState('');
-    const { addListing } = useContext(ListingsContext);
 
     // For Tutoring-specific fields
     const [subject, setSubject] = useState('');
@@ -16,26 +15,31 @@ const PostListingScreen = ({ navigation }) => {
     // For Moving Help-specific fields
     const [helpersNeeded, setHelpersNeeded] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
-    const [movingDescription, setMovingDescription] = useState(''); // Brief description for moving help
+    const [movingDescription, setMovingDescription] = useState('');
 
     // For Event Cleanup-specific fields
     const [eventType, setEventType] = useState('');
     const [startTime, setStartTime] = useState('');
     const [cleanersNeeded, setCleanersNeeded] = useState('');
-    const [cleanupDescription, setCleanupDescription] = useState(''); // Brief description for event cleanup
-    const [eventHourlyRate, setEventHourlyRate] = useState(''); // Hourly rate for event cleanup
+    const [cleanupDescription, setCleanupDescription] = useState('');
+    const [eventHourlyRate, setEventHourlyRate] = useState('');
 
     // For Other-specific fields
     const [jobType, setJobType] = useState('');
     const [paymentType, setPaymentType] = useState('');
-    const [otherDescription, setOtherDescription] = useState(''); // Brief description for other
+    const [otherDescription, setOtherDescription] = useState('');
 
-    const handleSubmit = () => {
-        // Prepare the listing object
-        const listing = { 
-            category, 
-            details: details || 'No additional details provided',
+    const handleSubmit = async () => {
+        // Prepare the listing object with appropriate field names
+        const listing = {
+            title: subject, // Assuming 'subject' is meant to be the title
+            description: details || 'No additional details provided',
+            price: hourlyRate, // Assuming 'hourlyRate' is the price
+            type: category, // Category such as 'Tutoring'
+            createdBy: '66e75eb3632eda9f2cabcd44', // Replace this with the actual user ID if available
+            school: 'UCLA', // Replace this with the actual school if it varies
         };
+    
 
         if (category === 'Tutoring') {
             listing.subject = subject;
@@ -44,22 +48,27 @@ const PostListingScreen = ({ navigation }) => {
         } else if (category === 'Moving Help') {
             listing.helpersNeeded = helpersNeeded;
             listing.estimatedTime = estimatedTime;
-            listing.movingDescription = movingDescription; // Added description for moving help
+            listing.movingDescription = movingDescription;
             listing.hourlyRate = hourlyRate;
         } else if (category === 'Event Cleanup') {
             listing.eventType = eventType;
             listing.startTime = startTime;
             listing.cleanersNeeded = cleanersNeeded;
-            listing.cleanupDescription = cleanupDescription; // Added description for event cleanup
-            listing.hourlyRate = eventHourlyRate; // Added hourly rate for event cleanup
+            listing.cleanupDescription = cleanupDescription;
+            listing.hourlyRate = eventHourlyRate;
         } else if (category === 'Other') {
             listing.jobType = jobType;
             listing.paymentType = paymentType;
-            listing.otherDescription = otherDescription; // Added description for other
+            listing.otherDescription = otherDescription;
         }
 
-        addListing(listing);
-        navigation.navigate('ServiceListings');
+        try {
+            const response = await axios.post('http://192.168.1.169:5000/listings', listing);
+            console.log('Listing created:', response.data);
+            navigation.navigate('ServiceListingsScreen');
+        } catch (error) {
+            console.error('Error creating xlisting:', error);
+        }
     };
 
     return (
@@ -188,8 +197,12 @@ const PostListingScreen = ({ navigation }) => {
                         value={paymentType}
                         onChangeText={setPaymentType}
                     />
-                    
-                    
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder="Brief Description of the job"
+                        value={otherDescription}
+                        onChangeText={setOtherDescription}
+                    />
                 </>
             )}
 
@@ -231,3 +244,5 @@ const styles = StyleSheet.create({
 });
 
 export default PostListingScreen;
+
+
