@@ -11,6 +11,9 @@ import PostListingScreen from './PostListingScreen';
 import SellScreen from './SellScreen';
 import SellTicketsScreen from './SellTicketsScreen';
 import TutoringScreen from './TutoringScreen';
+import MovingHelpScreen from './MovingHelpScreen';
+import EventCleanupScreen from './EventCleanupScreen';
+import OtherScreen from './OtherScreen';
 
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -35,6 +38,9 @@ const App = () => {
           <Stack.Screen name="PostListingScreen" component={PostListingScreen} />
           <Stack.Screen name="SellScreen" component={SellScreen} />
           <Stack.Screen name="SellTicketsScreen" component={SellTicketsScreen} />
+          <Stack.Screen name="MovingHelp" component={MovingHelpScreen} />
+          <Stack.Screen name="EventCleanup" component={EventCleanupScreen}/>
+          <Stack.Screen name="Other" component={OtherScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </ListingsProvider>

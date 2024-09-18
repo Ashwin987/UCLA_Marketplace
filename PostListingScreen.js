@@ -32,42 +32,48 @@ const PostListingScreen = ({ navigation }) => {
     const handleSubmit = async () => {
         // Prepare the listing object with appropriate field names
         const listing = {
-            title: subject, // Assuming 'subject' is meant to be the title
-            description: details || 'No additional details provided',
-            price: hourlyRate, // Assuming 'hourlyRate' is the price
+            title: subject || movingDescription || eventType || jobType || 'No Title Provided', // Adjusted to capture title from different categories
+            description: details || movingDescription || cleanupDescription || otherDescription || 'No Description Provided',
+            price: hourlyRate || eventHourlyRate, // Using hourlyRate for both tutoring and moving help
             type: category, // Category such as 'Tutoring'
             createdBy: '66e75eb3632eda9f2cabcd44', // Replace this with the actual user ID if available
             school: 'UCLA', // Replace this with the actual school if it varies
         };
     
-
+        // Include category-specific fields
         if (category === 'Tutoring') {
             listing.subject = subject;
             listing.className = className;
-            listing.hourlyRate = hourlyRate;
         } else if (category === 'Moving Help') {
             listing.helpersNeeded = helpersNeeded;
             listing.estimatedTime = estimatedTime;
-            listing.movingDescription = movingDescription;
-            listing.hourlyRate = hourlyRate;
         } else if (category === 'Event Cleanup') {
             listing.eventType = eventType;
             listing.startTime = startTime;
             listing.cleanersNeeded = cleanersNeeded;
-            listing.cleanupDescription = cleanupDescription;
-            listing.hourlyRate = eventHourlyRate;
         } else if (category === 'Other') {
             listing.jobType = jobType;
             listing.paymentType = paymentType;
-            listing.otherDescription = otherDescription;
         }
+
+        console.log('Listing to be sent:', listing); // Log the listing object to be sent to the server
 
         try {
             const response = await axios.post('http://192.168.1.169:5000/listings', listing);
             console.log('Listing created:', response.data);
             navigation.navigate('ServiceListingsScreen');
         } catch (error) {
-            console.error('Error creating xlisting:', error);
+            // Enhanced error logging
+            if (error.response) {
+                console.error('Error response data:', error.response.data);
+                console.error('Error response status:', error.response.status);
+                console.error('Error response headers:', error.response.headers);
+            } else if (error.request) {
+                console.error('Error request:', error.request);
+            } else {
+                console.error('Error message:', error.message);
+            }
+            console.error('Error config:', error.config);
         }
     };
 
@@ -128,12 +134,7 @@ const PostListingScreen = ({ navigation }) => {
                         value={estimatedTime}
                         onChangeText={setEstimatedTime}
                     />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Brief Description (e.g., Moving heavy items)"
-                        value={movingDescription}
-                        onChangeText={setMovingDescription}
-                    />
+                   
                     <TextInput
                         style={styles.textInput}
                         placeholder="Hourly Rate (e.g., 15)"
@@ -153,12 +154,7 @@ const PostListingScreen = ({ navigation }) => {
                         value={eventType}
                         onChangeText={setEventType}
                     />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Start Time (e.g., 5:00 PM)"
-                        value={startTime}
-                        onChangeText={setStartTime}
-                    />
+                    
                     <TextInput
                         style={styles.textInput}
                         placeholder="Number of Cleaners Needed"
@@ -166,12 +162,7 @@ const PostListingScreen = ({ navigation }) => {
                         value={cleanersNeeded}
                         onChangeText={setCleanersNeeded}
                     />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Brief Description (e.g., Post-event cleanup)"
-                        value={cleanupDescription}
-                        onChangeText={setCleanupDescription}
-                    />
+                    
                     <TextInput
                         style={styles.textInput}
                         placeholder="Hourly Rate (e.g., 12)"
@@ -197,11 +188,13 @@ const PostListingScreen = ({ navigation }) => {
                         value={paymentType}
                         onChangeText={setPaymentType}
                     />
-                    <TextInput
+                    
+                     <TextInput
                         style={styles.textInput}
-                        placeholder="Brief Description of the job"
-                        value={otherDescription}
-                        onChangeText={setOtherDescription}
+                        placeholder="Hourly Rate (e.g., 15)"
+                        keyboardType="numeric"
+                        value={hourlyRate}
+                        onChangeText={setHourlyRate}
                     />
                 </>
             )}
@@ -244,5 +237,3 @@ const styles = StyleSheet.create({
 });
 
 export default PostListingScreen;
-
-
