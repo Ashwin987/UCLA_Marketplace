@@ -1,3 +1,5 @@
+
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -59,7 +61,7 @@ const PostListingScreen = ({ navigation }) => {
         console.log('Listing to be sent:', listing); // Log the listing object to be sent to the server
 
         try {
-            const response = await axios.post('http://192.168.1.169:5000/listings', listing);
+            const response = await axios.post('http://192.168.0.107:5000/listings', listing);
             console.log('Listing created:', response.data);
             navigation.navigate('ServiceListingsScreen');
         } catch (error) {

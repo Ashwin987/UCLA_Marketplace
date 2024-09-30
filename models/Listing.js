@@ -1,3 +1,5 @@
+// listings.js
+
 const mongoose = require('mongoose');
 
 const listingSchema = new mongoose.Schema({
@@ -18,7 +20,7 @@ const listingSchema = new mongoose.Schema({
     estimatedTime: { type: Number },
     movingDescription: { type: String },
 
-    // Fields for Event Cleanup listings (if needed)
+    // Fields for Event Cleanup listings
     eventType: { type: String },
     startTime: { type: String },
     cleanersNeeded: { type: Number },
@@ -28,4 +30,5 @@ const listingSchema = new mongoose.Schema({
     paymentType: { type: String },
 });
 
+// Export only the Mongoose model
 module.exports = mongoose.model('Listing', listingSchema);

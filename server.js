@@ -1,17 +1,21 @@
+// server.js
+
 // Import required packages
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 require('dotenv').config();
 
 // Initialize Express app
 const app = express();
 
-// Middleware to parse JSON bodies
+// Middleware to parse JSON bodies and handle CORS
 app.use(express.json());
+app.use(cors());
 
 // Import models
 const User = require('./models/User');
-const Listing = require('./models/Listing');
+const Listing = require('./models/Listing'); // Adjusted to directly import the Listing model
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -34,10 +38,11 @@ app.post('/listings', async (req, res) => {
   }
 });
 
-// Get all listings
+// Get all listings filtered by school (adjusted to handle school filtering)
 app.get('/listings', async (req, res) => {
   try {
-    const listings = await Listing.find().populate('createdBy', 'name email');
+    const school = req.query.school; // Retrieve the school query parameter from request
+    const listings = await Listing.find(school ? { school: school } : {}).populate('createdBy', 'name email');
     res.send(listings);
   } catch (error) {
     res.status(500).send(error.message);
@@ -77,13 +82,6 @@ app.delete('/listings/:id', async (req, res) => {
   }
 });
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-
-
 // Create a new user
 app.post('/users', async (req, res) => {
   try {
@@ -94,5 +92,9 @@ app.post('/users', async (req, res) => {
     res.status(400).send(error.message);
   }
 });
-const cors = require('cors');
-app.use(cors());
+
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

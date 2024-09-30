@@ -9,7 +9,7 @@ const MovingHelpScreen = () => {
         // Fetch moving help listings from the server
         const fetchMovingHelpListings = async () => {
             try {
-                const response = await axios.get('http://192.168.1.169:5000/listings'); // Adjust the IP address if necessary
+              const response = await axios.get('http://192.168.0.107:5000/listings');
                 console.log('Response data:', response.data); // Log the response data
                 
                 // Log the type of each listing

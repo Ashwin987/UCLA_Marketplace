@@ -8,7 +8,8 @@ const EventCleanupScreen = () => {
     useEffect(() => {
         const fetchListings = async () => {
             try {
-                const response = await axios.get('http://192.168.1.169:5000/listings');
+                const response = await axios.get('http://192.168.0.107:5000/listings');
+
                 const eventCleanupListings = response.data.filter(listing => listing.type === 'Event Cleanup');
                 setListings(eventCleanupListings);
             } catch (error) {
