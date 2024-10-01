@@ -1,30 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const MovingHelpScreen = () => {
     const [movingHelpListings, setMovingHelpListings] = useState([]);
+    const navigation = useNavigation();
 
     useEffect(() => {
         // Fetch moving help listings from the server
         const fetchMovingHelpListings = async () => {
             try {
-              const response = await axios.get('http://192.168.0.107:5000/listings');
+                const response = await axios.get('http://192.168.0.107:5000/listings');
                 console.log('Response data:', response.data); // Log the response data
-                
+
                 // Log the type of each listing
                 response.data.forEach(listing => console.log('Listing type:', listing.type));
-    
+
                 // Filter the listings to only include those with the type "Moving Help"
                 const movingHelp = response.data.filter(listing => listing.type === 'Moving Help');
                 console.log('Filtered Moving Help Listings:', movingHelp); // Log the filtered moving help listings
-                
+
                 setMovingHelpListings(movingHelp);
             } catch (error) {
                 console.error('Error fetching moving help listings:', error);
             }
         };
-    
+
         fetchMovingHelpListings();
     }, []);
 
@@ -38,10 +40,15 @@ const MovingHelpScreen = () => {
                     renderItem={({ item }) => (
                         <View style={styles.listingContainer}>
                             <Text style={styles.listingTitle}>Moving Help</Text>
-                            
                             <Text>{`Helpers Needed: ${item.helpersNeeded !== undefined ? item.helpersNeeded : 'Not specified'}`}</Text>
                             <Text>{`Estimated Time: ${item.estimatedTime !== undefined ? item.estimatedTime : 'Not specified'} hours`}</Text>
                             <Text>{`Hourly Rate: $${item.price || 'Not specified'}`}</Text>
+                            <TouchableOpacity
+                                style={styles.detailsButton}
+                                onPress={() => navigation.navigate('MovingHelpDetails', { listing: item })}
+                            >
+                                <Text style={styles.detailsButtonText}>View Details</Text>
+                            </TouchableOpacity>
                         </View>
                     )}
                 />
@@ -71,6 +78,16 @@ const styles = StyleSheet.create({
     listingTitle: {
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    detailsButton: {
+        backgroundColor: '#2196F3',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
+    },
+    detailsButtonText: {
+        color: 'white',
+        textAlign: 'center',
     },
 });
 
